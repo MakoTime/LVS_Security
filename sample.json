@@ -1,0 +1,19 @@
+{
+    "events": [
+      {
+        "eventType": "1",
+        "imagePath": "/c/file",
+        "eventTime": "10pm"
+      },
+      {
+        "eventType": "2",
+        "imagePath": "/c/file",
+        "eventTime": "11pm"
+      },
+      {
+        "eventType": "3",
+        "imagePath": "/c/file",
+        "eventTime": "10.01pm"
+      }
+    ]
+  }
