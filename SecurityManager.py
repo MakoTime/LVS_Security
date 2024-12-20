@@ -1,5 +1,24 @@
-import cmd
+from EventLogger import EventLogger, EventTypes
+from SecurityCamera import CameraViewer
+from SecurityStates import SecurityStateMachine
+import cmd, sys
 
+class SecurityManager():
+    try:
+        camera = CameraViewer(0)
+    except:
+        print("Unable To Open Camera")
+        camera = None
+        
+    logger = EventLogger()
+    simulator = SecurityStateMachine()
+        
+    @classmethod
+    def security_action(cls, action, arguments):
+        function = getattr(cls.simulator, action)
+        function(arguments)
+        
+    
 class SecurityUI(cmd.Cmd):
     intro = 'Welcome to the LVS Security system. Type help or ? to list commands.\n'
     prompt = "> "
@@ -19,6 +38,7 @@ class SecurityUI(cmd.Cmd):
     def do_quit(self, args):
         return True
         
+
 if __name__ == "__main__":
     securityUi = SecurityUI()
     securityUi.cmdloop()
