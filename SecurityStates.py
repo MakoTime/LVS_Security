@@ -19,6 +19,8 @@ class SecurityStateMachine(StateMachine):
     catch = hacking.to(detained)
     ignore = hacking.to(allowed)
     move_on = (detained.to(idle) | allowed.to(idle))
+
+    
     
     def __init__(self):
         self.maxTries = 3
