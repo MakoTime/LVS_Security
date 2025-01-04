@@ -35,9 +35,8 @@ class Camera(threading.Thread):
             en.notify(en.SubscribedEventType.ERROR_EVENT,
                       logging_level=en.LoggingLevel.WARNING,
                       error_location=type(self).__name__,
-                      description=f"Camera Unavailable")
-            self.camera_cap.release()
-            exit()
+                      description=f"Camera {self.feed_name} Unavailable")
+            self.quit()
 
     def run(self):
         """Threaded loop that runs continuously, constantly reads the camera input
@@ -190,7 +189,13 @@ class CameraManager:
         """Captures images on all cameras to the given file location"""
         if not camera:
             for camera_name in self.cameras.keys():
-                self.capture(file_location=file_location, camera=camera_name)
+                try:
+                    self.capture(file_location=file_location, camera=camera_name)
+                except Exception as e:
+                    en.notify(en.SubscribedEventType.ERROR_EVENT,
+                        logging_level=en.LoggingLevel.WARNING,
+                        error_location=type(self).__name__,
+                        description=f"No capture available for {camera_name} {e}")
         else:
             try:
                 self.cameras[str(camera)].capture(file_location)

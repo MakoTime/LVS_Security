@@ -66,7 +66,7 @@ class SecurityStateMachine(StateMachine):
 
     def before_open(self, user_id):
         """At the start of the open action, reads and compares the given id"""
-        self.user_id = user_id
+        self.user_id = int(user_id)
         self.id_accepted = self.user_id in self.allowable_ids
         en.notify(en.SubscribedEventType.SECURITY_EVENT,
                   event_id=en.EventTypes.PERSON_DETECTED)

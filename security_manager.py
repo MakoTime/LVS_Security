@@ -46,10 +46,33 @@ class CommandUI(cmd.Cmd, threading.Thread):
     def do_sim(self, action):
         """cmd callable function to interface with state machine actions, for specific actions
             see the state machine in use"""
-        try:
-            self.manager.security_action(action)
-        except Exception as e:
-            print(f"{e} is not a possible action")
+        action_args = action.split(" ")
+        arg_length = len(action_args)
+        if arg_length == 1:
+            try:
+                self.manager.security_action(action)
+            except Exception as e:
+                print(f"{e} is not a possible action")
+                en.notify(en.SubscribedEventType.ERROR_EVENT,
+                      logging_level=en.LoggingLevel.WARNING,
+                      error_location=type(self).__name__,
+                      description=f"{e} is not a possible action")
+        elif arg_length == 2:
+            try:
+                self.manager.security_action(action_args[0], action_args[1])
+            except Exception as e:
+                print(f"{e} is not a possible action")
+                en.notify(en.SubscribedEventType.ERROR_EVENT,
+                      logging_level=en.LoggingLevel.WARNING,
+                      error_location=type(self).__name__,
+                      description=f"{e} is not a possible action")
+        else:
+            print(f"Wrong number of arguments: {arg_length}")
+            en.notify(en.SubscribedEventType.ERROR_EVENT,
+                      logging_level=en.LoggingLevel.WARNING,
+                      error_location=type(self).__name__,
+                      description=f"Wrong number of arguments: {arg_length}")
+            
 
     def do_quit(self, args):
         """Calls the manager to quit"""
@@ -103,13 +126,11 @@ class SecurityManager():
         """Searches for available actions in the statemachine and calls it"""
         print(f"Action: {action}")
         function = getattr(self.simulator, action)
-        result = function(arguments)
-        if type(result) == en.EventTypes:
-            self.trigger_event(result)
+        function(arguments)
 
     def trigger_event(self, event_id):
         time = datetime.datetime.now()
-        formatted_time = f"{time.year}-{time.month}-{time.day}_{time.hour}{time.minute}{time.second}"
+        formatted_time = f"{time.year}-{time.month}-{time.day}_{time.hour}h{time.minute}m{time.second}s"
         folder_name = f"event_{event_id}_{formatted_time}"
 
         path = os.path.dirname(os.path.realpath('__file__')) + "\\event_captures"
@@ -141,5 +162,8 @@ if __name__ == "__main__":
     parser.add_argument("-c", "--camera", action='append', required=False)
     args = parser.parse_args()
     # Integers parsed in will be counted as strings, this changes it back
-    int_checked_cameras = [int(camera) for camera in args.camera if camera.isdigit()]
-    manager = SecurityManager(int_checked_cameras)
+    if args.camera:
+        camera_input = [int(camera) for camera in args.camera if camera.isdigit()]
+    else:
+        camera_input = None
+    manager = SecurityManager(camera_input)
