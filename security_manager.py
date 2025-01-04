@@ -11,6 +11,7 @@ import os
 import cmd
 import threading
 import datetime
+import argparse
 import logging_handler
 import event_notifier as en
 from event_logger import EventLogger
@@ -133,4 +134,12 @@ class SecurityManager():
 
 
 if __name__ == "__main__":
-    manager = SecurityManager()
+    # For multiple cameras add -c before each camera input
+    # eg: python security_manager.py -c 0 -c 1 -c 2
+    parser = argparse.ArgumentParser(prog="LVS Security Application",
+                                     description="A basic security system simulation")
+    parser.add_argument("-c", "--camera", action='append', required=False)
+    args = parser.parse_args()
+    # Integers parsed in will be counted as strings, this changes it back
+    int_checked_cameras = [int(camera) for camera in args.camera if camera.isdigit()]
+    manager = SecurityManager(int_checked_cameras)

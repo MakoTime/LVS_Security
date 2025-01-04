@@ -32,7 +32,6 @@ class Camera(threading.Thread):
         self.is_quitting = False
         self.frame = None
         if not self.camera_cap.isOpened():
-            print("ISSUE")
             en.notify(en.SubscribedEventType.ERROR_EVENT,
                       logging_level=en.LoggingLevel.WARNING,
                       error_location=type(self).__name__,

@@ -98,6 +98,7 @@ class SecurityStateMachine(StateMachine):
 
 if __name__ == "__main__":
     # Generate the state machine png if run "python security_states.py"
+    # Requires pydot to generate
     sm = SecurityStateMachine(allowable_ids=[42, 100, 55])
     sm._graph().write_png("SecurityStateMachine.png")
 
