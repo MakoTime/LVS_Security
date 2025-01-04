@@ -134,7 +134,8 @@ class SecurityManager():
         folder_name = f"event_{event_id}_{formatted_time}"
 
         path = os.path.dirname(os.path.realpath('__file__')) + "\\event_captures"
-        assert os.path.exists(path)
+        if not os.path.exists(path):
+            os.mkdir("event_captures")
         folder_path = path + "\\" + folder_name
         os.makedirs(name=folder_path)
         self.camera_manager.capture(folder_path)

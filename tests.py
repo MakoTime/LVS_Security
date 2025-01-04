@@ -121,6 +121,8 @@ class CameraTests(unittest.TestCase):
     def setUp(self):
         self.camera = None
         self.path = os.path.dirname(os.path.realpath('__file__')) + "\\test_captures"
+        if not os.path.exists(self.path):
+            os.mkdir(self.path)
         self.clear_captures()
 
     def tearDown(self):
