@@ -1,4 +1,16 @@
 # LVS Security Application
+## Assumptions
+The souce of the events is triggered externally, not from the camera itself. The state machine included will generate the events as if they came from a proximity sensor, internal tampering mechanism or output from a third party device. The events that can be triggered are:
+ - PERSON_DETECTED
+ - PERSON_ID_ATTEMPT
+ - PERSON_ID_SUCCESS
+ - PERSON_ID_FAIL
+ - PERSON_ENTER
+ - PERSON_DETAINED
+
+The camera image file name was modified slightly to allow for multiple cameras to capture events, instead of the file name mentioning the time, date and event code, the folder it is stored in will provide that information and the image will only provide the name of the camera that took it. This will preserve the information tied to each image in their parent directory and will not create too much visual noise when dealing with many cameras.
+
+This system was tested on a PC with no camera provided and one with an internal webcam. Theoretically giving the system a HTTP link from an IP webcam should work, but it hasn't been tested as I don't have access to one.
 
 ## Overview
 The system as a whole consists of the following modules:
@@ -27,8 +39,8 @@ To begin the security application run the security manager. This assumes you hav
 python security_manager.py -c 0
 ```
 __Navigating the state machine__  
-The current state machine has the following layout:
-![alt text](SecurityStateMachine.png "Title")
+The security state machine has the following layout:
+![alt text](SecurityStateMachine.png "SecurityStateMachine")
 The state begins at idle and through the cmd terminal the state machine can be navigted through. using the `sim` argument followed by a state machine action. The actions are the blue arrows and the states are the boxes.
 
 Here is some example code, the allowable access codes are 42 and 50
