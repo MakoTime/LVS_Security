@@ -45,7 +45,7 @@ Moving from detected to scanning
 Action: open
 Moving from scanning to scanning
 > sim identify
-Action: open
+Action: identify
 Moving from scanning to allowed
 ```
 
